@@ -1,2 +1,5 @@
 require "./app.rb"
-run App
+
+map '/api/v1' do
+  run App
+end

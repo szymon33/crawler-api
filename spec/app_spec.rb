@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './app'
 
 RSpec.describe App do
@@ -7,10 +9,19 @@ RSpec.describe App do
     App.new
   end
 
-  describe 'GET root' do
-    it 'is successful' do
-      get '/'
-      expect(last_response).to be_ok
+  describe 'GET status' do
+    before(:each) { get '/' }
+
+    it 'is success' do
+      expect(last_response.status).to eql 200
+    end
+
+    it 'is JSON respnose content type' do
+      expect(last_response.content_type).to eql 'application/json'
+    end
+
+    it 'has OK status' do
+      expect(json_response[:status]).to eq 'OK'
     end
   end
 
