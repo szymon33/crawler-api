@@ -9,6 +9,14 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 
 group :development, :test do
   gem 'pry'
+  gem 'rspec-rails', '~> 3.8'
+end
+
+group :test do
+  gem 'foobar'
+  gem 'simplecov', require: false
+  gem 'webmock'
+  gem 'vcr'
 end
 
 group :development do
