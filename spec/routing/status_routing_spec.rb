@@ -6,6 +6,6 @@ describe 'status route', type: :routing do
   it { should be_routable }
   it { should route_to(subdomain: 'api',
                        format: 'json',
-                       controller: 'api/v1/heartbeat',
+                       controller: 'api/v1/homes',
                        action: 'status') }
 end

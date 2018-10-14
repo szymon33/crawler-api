@@ -5,6 +5,10 @@ module API::V1
       render json: result, status: 200
     end
 
+    def status
+      render json: { status: 'OK' }, status: 200
+    end
+
     private
 
     def query
