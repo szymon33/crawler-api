@@ -2,7 +2,11 @@ require 'rails_helper'
 
 describe API::V1::HomesController do
   describe 'GET search' do
-    before { get 'search' }
+    before do
+      allow_any_instance_of(MasClient).to receive(:build)
+        .and_return(en: 'La La Land')
+      get 'search', query: 'string-to-search'
+    end
 
     it 'is success' do
       expect(response.status).to eql 200 # success
@@ -12,8 +16,12 @@ describe API::V1::HomesController do
       expect(response.content_type).to eql 'application/json'
     end
 
-    it 'has OK body' do
-      expect(json_response[:message]).to eq 'OK'
+    it 'renders response from MasClient' do
+      expect(json_response).to eq(en: 'La La Land')
+    end
+
+    it 'assigns query instance variable' do
+      expect(assigns(:query)).to eq('string-to-search')
     end
   end
 end
