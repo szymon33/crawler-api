@@ -45,6 +45,15 @@ class MasClient
     end
   end
 
+  def self.status
+    response = get('/en/search')
+    if response.success?
+      { status: 'OK' }
+    else
+      { error: "Server error #{response.code}" }
+    end
+  end
+
   private
 
   def english_version(search_body_html)

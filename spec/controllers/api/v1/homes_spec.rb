@@ -26,7 +26,10 @@ describe API::V1::HomesController do
   end
 
   describe 'GET status' do
-    before { get :status }
+    before do
+      allow(MasClient).to receive(:status).and_return(en: 'Player One')
+      get :status
+    end
 
     it 'is success' do
       expect(response.status).to eql 200 # success
@@ -37,7 +40,7 @@ describe API::V1::HomesController do
     end
 
     it 'has status OK' do
-      expect(json_response[:status]).to eq 'OK'
+      expect(json_response).to eq(en: 'Player One') 
     end
   end
 end

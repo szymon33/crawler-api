@@ -107,4 +107,19 @@ describe MasClient do
                             .send(:strip_tags, '<b>Test<b>')
     expect(result).to eq 'Test'
   end
+
+  describe 'status' do
+    subject { described_class.status }
+
+    it 'returns message OK', vcr: { cassette_name: 'mas-client-server-ok' } do
+      expect(subject).to eq(status: 'OK')
+    end
+
+    it 'returns server error code', vcr: { cassette_name: 'mas-client-server-fails' } do
+      allow(described_class).to receive(:get).and_wrap_original do |original_method, _a|
+        original_method.call('/blabla')
+      end
+      expect(subject).to eq(error: 'Server error 404')
+    end
+  end
 end

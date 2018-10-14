@@ -6,7 +6,7 @@ module API::V1
     end
 
     def status
-      render json: { status: 'OK' }, status: 200
+      render json: MasClient.status, status: 200
     end
 
     private
