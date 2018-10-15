@@ -70,3 +70,61 @@ We will be considering the following aspects of your solution:
 * Suitability of technologies used
 * Use of gems and third party libraries
 * Ruby on Rails is a must
+
+# MAS-Technical-Test-Ruby Answer
+
+## Algorithm
+
+We are going to discover English title and url among with Welsh title and url of the first search result then serve it as JSON response.
+
+1. The program calls MAS search page with query.
+2. Extract the first result from page's body.
+3. The result title and url are the first part of the required JSON response.
+4. Open the result page itself
+5. Find the switch to the Welsh language A tag in the body and store its href as Welsh version url.
+6. Open the Welsh version of the page.
+7. Extract the value of H1 tag on that page and store it as the title of Welsh version.
+
+Note: there are 3 calls to MAS webpage.
+
+## Instalation
+
+### Run
+
+```
+bundle
+```
+
+### Start web server
+
+```
+bundle exec rails s
+```
+
+API is in subdomain so add something like
+
+```
+127.0.0.1       api.example.com 
+```
+
+to your `/etc/hosts` file
+
+## Checking with cURL
+
+You might check application status like this
+
+```
+curl http://api.example.com:3000/api/v1/status
+```
+
+```
+{
+  "status": "OK"
+}
+```
+
+You might inspect how I play with [cURL](https://curl.haxx.se) in the following [sample sessions file](CURL.md).
+
+## Automatic testing (TDD/BDD)
+
+I use Rspec for tests. API was developed facing TDD approach. Installed gem simplecov shows 100% coverage.
