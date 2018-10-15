@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'httparty'
 
 class MasClient
@@ -38,10 +40,10 @@ class MasClient
 
   def build
     resp = self.class.get('/en/search', @options)
-    if resp.success? && resp.match(FOUND_DETECTOR)
-      english_version(resp).merge(welsh_version)
+    if resp.success?
+      resp.match(FOUND_DETECTOR) ? english_version(resp).merge(welsh_version) : {}
     else
-      {}
+      { error: "Server error #{resp.code}" }
     end
   end
 

@@ -4,7 +4,7 @@ describe MasClient do
   let(:mas_client) { described_class.new }
   let(:valid_search_str) { 'Mortgages – a beginner’s guide' }
   let(:invalid_search_str) { 'Lorem ipsum dolor sit amet' }
-  let(:server_response) { double('success?': false) }
+  let(:server_response) { double('success?': false, code: 404) }
   let(:stub_server!) { allow(described_class).to receive(:get) { server_response } }
 
   describe '.build' do
@@ -61,6 +61,19 @@ describe MasClient do
       it { is_expected.to be_a Hash }
       it { is_expected.to be_empty }
     end
+
+    context 'with failing server' do
+      subject { described_class.new.build }
+
+      it 'returns server error code',
+         vcr: { cassette_name: 'mas-client-server-fails' } do
+        allow(described_class).to receive(:get).and_wrap_original do |orig_method, _a|
+          orig_method.call('/blabla')
+        end
+
+        expect(subject).to eq(error: 'Server error 404')
+      end
+    end
   end
 
   describe '.english_version' do
@@ -115,9 +128,10 @@ describe MasClient do
       expect(subject).to eq(status: 'OK')
     end
 
-    it 'returns server error code', vcr: { cassette_name: 'mas-client-server-fails' } do
-      allow(described_class).to receive(:get).and_wrap_original do |original_method, _a|
-        original_method.call('/blabla')
+    it 'returns server error code',
+       vcr: { cassette_name: 'mas-client-server-fails' } do
+      allow(described_class).to receive(:get).and_wrap_original do |orig_method, _a|
+        orig_method.call('/blabla')
       end
       expect(subject).to eq(error: 'Server error 404')
     end
